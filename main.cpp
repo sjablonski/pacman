@@ -17,11 +17,13 @@ int main(void) {
     Engine *e = Engine::getInstance();
     e->allegroInit();
     e->allegroKeyboardInit();
+    e->allegroImageInit();
     ALLEGRO_DISPLAY *display = e->createDisplay();
 
     Board b(30, 28, "Board.txt");
     b.loadBoard(display);
-    al_init_primitives_addon();
+    b.addImage(e->loadBitmap("images/wall.png"));
+    b.addImage(e->loadBitmap("images/blank.png"));
 
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_TIMER *timer = NULL;
@@ -37,7 +39,7 @@ int main(void) {
         return -1;
     }
     
-    bouncer = al_create_bitmap(24, 24);
+    bouncer = al_create_bitmap(16, 16);
     if(!bouncer) {
         al_destroy_display(display);
         al_destroy_timer(timer);
@@ -63,7 +65,7 @@ int main(void) {
     al_flip_display();
     al_start_timer(timer);
 
-    float moveSpeed = 5;
+    float moveSpeed = 3;
     
     while(!doexit) {
         ALLEGRO_EVENT ev;
@@ -137,7 +139,7 @@ int main(void) {
         if(redraw && al_is_event_queue_empty(event_queue)) {
             redraw = false;
     
-            al_clear_to_color(al_map_rgb(0,0,0));
+            al_clear_to_color(al_map_rgb(255,255,255));
             b.createBoard();
             al_draw_bitmap(bouncer, bouncer_x, bouncer_y, 0);
     

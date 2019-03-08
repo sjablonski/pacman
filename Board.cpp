@@ -50,9 +50,15 @@ void Board::createBoard() {
     for(int i=0; i<row; i++) {
         for(int j=0; j<column; j++) {
             if(board[i][j] == '#')
-			    al_draw_filled_rectangle(j*16+24, i*16+24, j*16+48, i*16+48, al_map_rgb(255,255,255));
+			    al_draw_bitmap(image[0],j*16+24, i*16+24,0);
+                //al_draw_bitmap_region(image[0], 0, 0, 24, 24, j*16+24, i*16+24, 0);
             else
-                al_draw_filled_rectangle(j*16+24, i*16+24, j*16+48, i*16+48, al_map_rgb(0,255,0));
+                al_draw_bitmap(image[1],j*16+24, i*16+24,0);
+                //al_draw_bitmap_region(image[1], 0, 0, 24, 24, j*16+24, i*16+24, 0);
         }
     }
+}
+
+void Board::addImage(ALLEGRO_BITMAP *i) {
+    image.push_back(i);
 }

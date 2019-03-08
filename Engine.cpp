@@ -68,9 +68,10 @@ ALLEGRO_DISPLAY *Engine::createDisplay() {
 }
 
 ALLEGRO_BITMAP *Engine::loadBitmap(const char *bitmapName) {
-    ALLEGRO_BITMAP image = al_load_bitmap(bitmapName);
+    ALLEGRO_BITMAP *image = al_load_bitmap(bitmapName);
     if(!image)
         cerr << "Error: Load bitmap " << bitmapName << '\n';
     else
         cout << "Success: Load bitmap " << bitmapName << '\n';
+    return image;
 }
