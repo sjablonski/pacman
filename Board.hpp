@@ -3,6 +3,7 @@
 
 #include <allegro5/allegro.h>
 #include <vector>
+#include "ControlKeys.hpp"
 
 class Board {
     int row;
@@ -17,6 +18,24 @@ public:
     void loadBoard(ALLEGRO_DISPLAY*);
     void createBoard();
     void addImage(ALLEGRO_BITMAP*);
+    bool checkMovement(CONTROLKEYS, int, int);
+};
+
+class Tile {
+    int x;
+    int y;
+    int top;
+    int bottom;
+    int left;
+    int right;
+
+public:
+    Tile(int, int);
+    bool isWall();
+    int getTop();
+    int getBottom();
+    int getLeft();
+    int getRight();
 };
 
 #endif

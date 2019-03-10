@@ -1,4 +1,5 @@
 #include "Board.hpp"
+#include "ControlKeys.hpp"
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
@@ -50,15 +51,56 @@ void Board::createBoard() {
     for(int i=0; i<row; i++) {
         for(int j=0; j<column; j++) {
             if(board[i][j] == '#')
-			    al_draw_bitmap(image[0],j*16+24, i*16+24,0);
-                //al_draw_bitmap_region(image[0], 0, 0, 24, 24, j*16+24, i*16+24, 0);
+			    al_draw_bitmap(image[0],j*16, i*16,0);
             else
-                al_draw_bitmap(image[1],j*16+24, i*16+24,0);
-                //al_draw_bitmap_region(image[1], 0, 0, 24, 24, j*16+24, i*16+24, 0);
+                al_draw_bitmap(image[1],j*16, i*16,0);
         }
     }
 }
 
 void Board::addImage(ALLEGRO_BITMAP *i) {
     image.push_back(i);
+}
+
+bool Board::checkMovement(CONTROLKEYS key, int x, int y) {
+    bool xOverlaps = false;
+    bool yOverlaps = false;
+    bool collision = false;
+    for(int i=0; i<row; i++) {
+        for(int j=0; j<column; j++) {
+            Tile t(j, i);
+            if(board[i][j] == '#') {
+                xOverlaps = (x < t.getRight()) && (x+16 > t.getLeft());
+                yOverlaps = (y < t.getBottom()) && (y+16 > t.getTop());
+                if(xOverlaps && yOverlaps)
+                    collision = true;
+            }
+        }
+    }
+    return collision;
+}
+
+Tile::Tile(int x, int y) {
+    this->x = x;
+    this->y = y;
+    this->top = y*16;
+    this->bottom = y*16+16;
+    this->left = x*16;
+    this->right = x*16+16;
+}
+
+int Tile::getTop() {
+    return top;
+}
+
+int Tile::getBottom() {
+    return bottom;
+}
+
+int Tile::getLeft() {
+    return left;
+}
+
+int Tile::getRight() {
+    return right;
 }

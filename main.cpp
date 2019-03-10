@@ -3,15 +3,10 @@
 #include <stdio.h>
 
 const float FPS = 60;
-const int SCREEN_W = 616;
-const int SCREEN_H = 700;
-const int BOUNCER_SIZE = 32;
-enum MYKEYS {
-   KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
-};
 
 #include "Engine.hpp"
 #include "Board.hpp"
+#include "ControlKeys.hpp"
 
 int main(void) {
     Engine *e = Engine::getInstance();
@@ -28,8 +23,8 @@ int main(void) {
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_TIMER *timer = NULL;
     ALLEGRO_BITMAP *bouncer = NULL;
-    float bouncer_x = SCREEN_W / 2.0 - BOUNCER_SIZE / 2.0;
-    float bouncer_y = SCREEN_H / 2.0 - BOUNCER_SIZE / 2.0;
+    float bouncer_x = 14*16;
+    float bouncer_y = 23*16;
     bool key[4] = { false, false, false, false };
     bool redraw = true;
     bool doexit = false;
@@ -65,8 +60,7 @@ int main(void) {
     al_flip_display();
     al_start_timer(timer);
 
-    float moveSpeed = 3;
-    
+    float moveSpeed = 2;
     while(!doexit) {
         ALLEGRO_EVENT ev;
         al_wait_for_event(event_queue, &ev);
@@ -76,17 +70,29 @@ int main(void) {
                 bouncer_y -= moveSpeed;
             }
 
-            if(key[KEY_DOWN]) {
+            else if(key[KEY_DOWN]) {
                 bouncer_y += moveSpeed;
             }
 
-            if(key[KEY_LEFT]) {
+            else if(key[KEY_LEFT]) {
                 bouncer_x -= moveSpeed;
             }
 
-            if(key[KEY_RIGHT]) {
+            else if(key[KEY_RIGHT]) {
                 bouncer_x += moveSpeed;
             }
+
+            if(b.checkMovement(KEY_UP, bouncer_x, bouncer_y)) {
+                if(key[KEY_UP]) bouncer_y += moveSpeed;
+                else if(key[KEY_DOWN]) bouncer_y -= moveSpeed;
+                else if(key[KEY_LEFT]) bouncer_x += moveSpeed;
+                else if(key[KEY_RIGHT]) bouncer_x -= moveSpeed;
+            }
+
+            if(bouncer_x/16-1 >= 28) bouncer_x = 0*16;
+            if(bouncer_x/16-1 < -1) bouncer_x = 27*16;
+            if(bouncer_y/16-1 >= 30) bouncer_y = 0*16;
+            if(bouncer_y/16-1 < -1) bouncer_y = 29*16;
 
             redraw = true;
         }
@@ -139,13 +145,13 @@ int main(void) {
         if(redraw && al_is_event_queue_empty(event_queue)) {
             redraw = false;
     
-            al_clear_to_color(al_map_rgb(255,255,255));
+            al_clear_to_color(al_map_rgb(0,0,0));
             b.createBoard();
             al_draw_bitmap(bouncer, bouncer_x, bouncer_y, 0);
     
             al_flip_display();
         }
-        printf("(%f, %f)\n", bouncer_x, bouncer_y);
+        //printf("(%f, %f)\n", bouncer_x, bouncer_y);
     }
     
     al_destroy_bitmap(bouncer);
