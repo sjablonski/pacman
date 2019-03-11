@@ -18,7 +18,7 @@ public:
     void loadBoard(ALLEGRO_DISPLAY*);
     void createBoard();
     void addImage(ALLEGRO_BITMAP*);
-    bool checkMovement(CONTROLKEYS, int, int);
+    bool checkMovement(float, float);
 };
 
 class Tile {
@@ -30,7 +30,7 @@ class Tile {
     int right;
 
 public:
-    Tile(int, int);
+    Tile(float, float);
     bool isWall();
     int getTop();
     int getBottom();

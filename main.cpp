@@ -26,6 +26,7 @@ int main(void) {
     float bouncer_x = 14*16;
     float bouncer_y = 23*16;
     bool key[4] = { false, false, false, false };
+    bool dir[4] = { false, false, false, false };
     bool redraw = true;
     bool doexit = false;
 
@@ -60,33 +61,63 @@ int main(void) {
     al_flip_display();
     al_start_timer(timer);
 
-    float moveSpeed = 2;
+    float moveSpeed = 4;
+    float old_x;
+    float old_y;
     while(!doexit) {
         ALLEGRO_EVENT ev;
         al_wait_for_event(event_queue, &ev);
     
         if(ev.type == ALLEGRO_EVENT_TIMER) {
+            old_x = bouncer_x;
+            old_y = bouncer_y;
             if(key[KEY_UP]) {
-                bouncer_y -= moveSpeed;
+                dir[KEY_UP] = true;
+                dir[KEY_DOWN] = false;
+                dir[KEY_LEFT] = false;
+                dir[KEY_RIGHT] = false;
             }
 
             else if(key[KEY_DOWN]) {
-                bouncer_y += moveSpeed;
+                dir[KEY_UP] = false;
+                dir[KEY_DOWN] = true;
+                dir[KEY_LEFT] = false;
+                dir[KEY_RIGHT] = false;
             }
 
-            else if(key[KEY_LEFT]) {
-                bouncer_x -= moveSpeed;
+            else if(key[KEY_LEFT]){
+                dir[KEY_UP] = false;
+                dir[KEY_DOWN] = false;
+                dir[KEY_LEFT] = true;
+                dir[KEY_RIGHT] = false;
             }
 
             else if(key[KEY_RIGHT]) {
+                dir[KEY_UP] = false;
+                dir[KEY_DOWN] = false;
+                dir[KEY_LEFT] = false;
+                dir[KEY_RIGHT] = true;
+            }
+
+            if(dir[KEY_UP]) {
+                bouncer_y -= moveSpeed;
+            }
+
+            else if(dir[KEY_DOWN]) {
+                bouncer_y += moveSpeed;
+            }
+
+            else if(dir[KEY_LEFT]) {
+                bouncer_x -= moveSpeed;
+            }
+
+            else if(dir[KEY_RIGHT]) {
                 bouncer_x += moveSpeed;
             }
 
-            if(b.checkMovement(KEY_UP, bouncer_x, bouncer_y)) {
-                if(key[KEY_UP]) bouncer_y += moveSpeed;
-                else if(key[KEY_DOWN]) bouncer_y -= moveSpeed;
-                else if(key[KEY_LEFT]) bouncer_x += moveSpeed;
-                else if(key[KEY_RIGHT]) bouncer_x -= moveSpeed;
+            if(b.checkMovement(bouncer_x, bouncer_y)) {
+                bouncer_x = old_x;
+                bouncer_y = old_y;
             }
 
             if(bouncer_x/16-1 >= 28) bouncer_x = 0*16;

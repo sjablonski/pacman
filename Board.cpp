@@ -62,7 +62,7 @@ void Board::addImage(ALLEGRO_BITMAP *i) {
     image.push_back(i);
 }
 
-bool Board::checkMovement(CONTROLKEYS key, int x, int y) {
+bool Board::checkMovement(float x, float y) {
     bool xOverlaps = false;
     bool yOverlaps = false;
     bool collision = false;
@@ -80,7 +80,7 @@ bool Board::checkMovement(CONTROLKEYS key, int x, int y) {
     return collision;
 }
 
-Tile::Tile(int x, int y) {
+Tile::Tile(float x, float y) {
     this->x = x;
     this->y = y;
     this->top = y*16;
